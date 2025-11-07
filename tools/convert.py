@@ -79,6 +79,57 @@ class ModelQwenImage(ModelTemplate):
             "transformer_blocks.0.img_mlp.net.0.proj.weight",
         )
     ]
+    keys_hiprec = [
+        # Alle Bias-Parameter
+        ".bias",
+
+        # Spezifische Module aus der llm_int8_skip_modules Liste
+        "time_text_embed",
+        "img_in",
+        "txt_in",
+
+        # Transformer Blocks 0
+        "transformer_blocks.0.img_mod",
+        "transformer_blocks.0.img_mod.1",
+        "transformer_blocks.0.attn.to_q",
+        "transformer_blocks.0.attn.to_k",
+        "transformer_blocks.0.attn.to_v",
+        "transformer_blocks.0.attn.add_k_proj",
+        "transformer_blocks.0.attn.add_v_proj",
+        "transformer_blocks.0.attn.add_q_proj",
+        "transformer_blocks.0.attn.to_out.0",
+        "transformer_blocks.0.attn.to_add_out",
+        "transformer_blocks.0.img_mlp.net.0.proj",
+        "transformer_blocks.0.img_mlp.net.2",
+        "transformer_blocks.0.txt_mod.1",
+        "transformer_blocks.0.txt_mlp.net.0.proj",
+        "transformer_blocks.0.txt_mlp.net.2",
+
+        # Transformer Blocks 33
+        "transformer_blocks.33.img_mod",
+
+        # Transformer Blocks 58-59
+        "transformer_blocks.58.attn.to_k",
+        "transformer_blocks.59.attn.to_out",
+        "transformer_blocks.59.img_mod.1",
+        "transformer_blocks.59.attn.to_q",
+        "transformer_blocks.59.attn.to_k",
+        "transformer_blocks.59.attn.to_v",
+        "transformer_blocks.59.attn.add_k_proj",
+        "transformer_blocks.59.attn.add_v_proj",
+        "transformer_blocks.59.attn.add_q_proj",
+        "transformer_blocks.59.attn.to_out.0",
+        "transformer_blocks.59.attn.to_add_out",
+        "transformer_blocks.59.img_mlp.net.0.proj",
+        "transformer_blocks.59.img_mlp.net.2",
+        "transformer_blocks.59.txt_mod.1",
+        "transformer_blocks.59.txt_mlp.net.0.proj",
+        "transformer_blocks.59.txt_mlp.net.2",
+
+        # Output Layer
+        "norm_out.linear",
+        "proj_out"
+    ]
 
 class ModelHyVid(ModelTemplate):
     arch = "hyvid"
@@ -284,7 +335,7 @@ def handle_tensors(writer, state_dict, model_arch, allow_fp32=False):
         n_dims = len(data.shape)
         data_shape = data.shape
         if old_dtype == torch.bfloat16:
-            data_qtype = gguf.GGMLQuantizationType.BF16
+            data_qtype = gguf.GGMLQuantizationType.F16
         elif old_dtype == torch.float32 and allow_fp32:
             data_qtype = gguf.GGMLQuantizationType.F32
         else:
