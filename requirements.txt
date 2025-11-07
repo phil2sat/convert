@@ -1,5 +1,6 @@
 # main
-gguf>=0.13.0
+gguf>=0.17.1
 # optional - tokenizer
-sentencepiece
-protobuf
+sentencepiece>=0.2.1
+protobuf>=4.25.8
+
